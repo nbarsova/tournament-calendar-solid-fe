@@ -1,25 +1,36 @@
 import {Tournament} from "../types";
-import {For, Resource} from "solid-js";
+import {For, Switch, Match} from "solid-js";
 import {TournamentInfo} from "./TournamentInfo";
+import { createQuery } from '@tanstack/solid-query'
+import {fetchTournaments} from "../api/tournaments";
 
-interface TournamentListProps {
-    tournaments: Resource<Tournament[]>;
-}
+export function TournamentList() {
 
-export function TournamentList(props: TournamentListProps) {
+    const query = createQuery(() => ['tournaments'], fetchTournaments)
+
     return (
-        <table>
-            <thead>
-            <tr>
-                <th>NAME</th>
-                <th>DATE</th>
-                <th>LOCATION</th>
-                <th>DESCRIPTION</th>
-            </tr>
-            </thead>
-            <For each={props.tournaments()}>
-                {(tournament: Tournament) => <TournamentInfo tournament={tournament}/>}
-            </For>
-        </table>
+        <Switch>
+            <Match when={query.isLoading}>
+                <p>Loading...</p>
+            </Match>
+            <Match when={query.isError}>
+                <p>Error: {query.error.message}</p>
+            </Match>
+            <Match when={query.isSuccess}>
+                <table>
+                    <thead>
+                    <tr>
+                        <th>NAME</th>
+                        <th>DATE</th>
+                        <th>DESCRIPTION</th>
+                    </tr>
+                    </thead>
+                    <For each={query.data}>
+                        {(tournament: Tournament) => <TournamentInfo tournament={tournament}/>}
+                    </For>
+                </table>
+            </Match>
+        </Switch>
+
     );
 }

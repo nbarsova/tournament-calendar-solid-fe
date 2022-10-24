@@ -1,4 +1,4 @@
-import {Tournament} from "./types";
+import {Tournament} from "../types";
 
 export async function fetchTournaments() {
     let tournamentResponse: Response = await fetch("http://localhost:8080/tournaments");

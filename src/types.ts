@@ -5,11 +5,11 @@ export type MapLocation = {
 
 export type Tournament = {
     name: string;
-    date: Date;
+    date: string;
     description: string;
 }
 
 export const emptyTournament: Tournament = {
     name: "",
-    date: new Date(),
+    date: "",
     description: ""};

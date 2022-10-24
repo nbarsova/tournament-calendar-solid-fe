@@ -1,27 +1,31 @@
 import {createSignal, JSX} from "solid-js";
-import {emptyTournament} from "../types";
-import {addNewTournament} from "../fetchTournaments";
+import {emptyTournament, Tournament} from "../types";
+import {addNewTournament} from "../api/tournaments";
+import {createMutation} from '@tanstack/solid-query'
 
-interface AddTournamentProps {
-    refetch:any
-}
-
-export function AddTournament(props: AddTournamentProps) {
+export function AddTournament() {
     const [newTournament, setNewTournament] = createSignal(emptyTournament);
+
+    const mutation = createMutation(['tournaments'], (tournament: Tournament) => {
+        return addNewTournament(tournament);
+    });
 
     const addTournament: JSX.EventHandler<HTMLButtonElement, MouseEvent> = async (event) => {
         event.preventDefault();
-        await addNewTournament(newTournament());
-        props.refetch();
+        mutation.mutate(newTournament());
         setNewTournament(emptyTournament);
     };
+
+    console.log('new tournament', newTournament())
     return (<>
         <input type="text" value={newTournament().name} onInput={(e) => {
-            setNewTournament({ ...newTournament(), name: e.currentTarget.value });
+           setNewTournament({ ...newTournament(), name: e.currentTarget.value });
         }}/>
 
-        <input type="date" value={newTournament().date?.toDateString()} onInput={(e) => {
-            setNewTournament({ ...newTournament(), date: new Date(e.currentTarget.value) });
+        <input type="date" value={newTournament().date} onInput={(e) => {
+            console.log('wtf', e.currentTarget.value);
+
+            setNewTournament({ ...newTournament(), date: e.currentTarget.value });
         }}/>
 
         <input type="text" value={newTournament().description} onInput={(e) => {
@@ -29,5 +33,7 @@ export function AddTournament(props: AddTournamentProps) {
         }}/>
 
         <button onClick={addTournament}>Add</button>
+
+        <a href='/'>back to all tournaments</a>
     </>);
 }
