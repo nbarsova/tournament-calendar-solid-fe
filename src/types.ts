@@ -3,13 +3,14 @@ export type MapLocation = {
     lng?: Number;
 }
 
-export type Tournament = {
+export class Tournament  {
     name: string;
-    date: string;
+    date: Date;
     description: string;
 }
 
 export const emptyTournament: Tournament = {
     name: "",
-    date: "",
-    description: ""};
+    date: new Date(),
+    description: ""
+};

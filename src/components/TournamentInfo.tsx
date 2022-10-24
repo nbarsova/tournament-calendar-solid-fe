@@ -5,10 +5,11 @@ interface TournamentInfoProps {
 }
 
 export function TournamentInfo(props: TournamentInfoProps) {
+    console.log("rendering ", props.tournament)
     return (
         <tr>
             <td>{props.tournament.name}</td>
-            <td>{props.tournament.date}</td>
+            <td>{props.tournament.date.toDateString()}</td>
             <td>{props.tournament.description}</td>
         </tr>
     );

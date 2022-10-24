@@ -3,6 +3,7 @@ import {For, Switch, Match} from "solid-js";
 import {TournamentInfo} from "./TournamentInfo";
 import { createQuery } from '@tanstack/solid-query'
 import {fetchTournaments} from "../api/tournaments";
+import {TournamentsTable, TournamentsTableHeader} from "../styles";
 
 export function TournamentList() {
 
@@ -17,18 +18,20 @@ export function TournamentList() {
                 <p>Error: {query.error.message}</p>
             </Match>
             <Match when={query.isSuccess}>
-                <table>
+                <TournamentsTable>
                     <thead>
                     <tr>
-                        <th>NAME</th>
-                        <th>DATE</th>
-                        <th>DESCRIPTION</th>
+                        <TournamentsTableHeader>NAME</TournamentsTableHeader>
+                        <TournamentsTableHeader>DATE</TournamentsTableHeader>
+                        <TournamentsTableHeader>DESCRIPTION</TournamentsTableHeader>
                     </tr>
                     </thead>
                     <For each={query.data}>
-                        {(tournament: Tournament) => <TournamentInfo tournament={tournament}/>}
+                        {(tournament: Tournament) => {
+                            return (<TournamentInfo tournament={tournament}/>)
+                        }}
                     </For>
-                </table>
+                </TournamentsTable>
             </Match>
         </Switch>
 
