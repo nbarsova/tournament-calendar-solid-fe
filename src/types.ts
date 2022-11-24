@@ -1,16 +1,28 @@
-export type MapLocation = {
+export class MapLocation {
     lat?: Number;
     lng?: Number;
+    name: string;
+
+    constructor(newName: string) {
+        this.name = newName;
+    }
 }
 
-export class Tournament  {
+export class Tournament {
     name: string;
     date: Date;
-    description: string;
+    descriptionLink: string;
+    location?: MapLocation;
+
+    constructor() {
+        this.name = "";
+        this.date = new Date();
+        this.descriptionLink = "";
+    }
 }
 
 export const emptyTournament: Tournament = {
     name: "",
     date: new Date(),
-    description: ""
+    descriptionLink: ""
 };

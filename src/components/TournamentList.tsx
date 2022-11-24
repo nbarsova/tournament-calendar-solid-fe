@@ -7,7 +7,8 @@ import {TournamentsTable, TournamentsTableHeader} from "../styles";
 
 export function TournamentList() {
 
-    const query = createQuery(() => ['tournaments'], fetchTournaments)
+    const query = createQuery(() => ['tournaments'], fetchTournaments);
+    console.log("tournaments", query.data)
 
     return (
         <Switch>
@@ -23,7 +24,8 @@ export function TournamentList() {
                     <tr>
                         <TournamentsTableHeader>NAME</TournamentsTableHeader>
                         <TournamentsTableHeader>DATE</TournamentsTableHeader>
-                        <TournamentsTableHeader>DESCRIPTION</TournamentsTableHeader>
+                        <TournamentsTableHeader>LOCATION</TournamentsTableHeader>
+                        <TournamentsTableHeader>DETAILS</TournamentsTableHeader>
                     </tr>
                     </thead>
                     <For each={query.data}>
