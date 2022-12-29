@@ -1,15 +1,20 @@
 import {Tournament} from "../types";
-import {buildTournament} from "../util/tournaments";
 import {getCurrentHost} from "./apiConfig";
 
 const host = getCurrentHost();
 
 export async function fetchTournaments() {
-    let tournamentResponse: Response = await fetch(host+"tournaments");
-    let tournamentJSON = await tournamentResponse.json();
-    const obj = tournamentJSON.map((tournament: JSON)=>buildTournament(tournament));
-    console.log("obj", obj)
-    return obj;
+    try {
+        console.log("Fetching tournaments")
+        let tournamentResponse: Response = await fetch(host+"tournaments");
+        let tournamentJSON = await tournamentResponse.json();
+        console.log("fetched", tournamentJSON);
+        return tournamentJSON;
+    } catch (error) {
+        console.log("error", error);
+        return null;
+    }
+
 }
 
 export async function addNewTournament(tournament: Tournament) {

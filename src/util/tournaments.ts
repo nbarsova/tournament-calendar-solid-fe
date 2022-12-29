@@ -1,10 +1,9 @@
 import {Tournament} from "../types";
 
-// TODO: json typings?
 export const buildTournament = (tournamentJSON: any) => {
     let tournamentObject:Tournament=new Tournament();
     tournamentObject.name = tournamentJSON.name;
-    tournamentObject.descriptionLink = tournamentJSON.description;
+    tournamentObject.description = tournamentJSON.description;
     tournamentObject.date = new Date(tournamentJSON.date);
     return tournamentObject;
 }

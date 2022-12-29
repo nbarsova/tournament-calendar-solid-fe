@@ -1,24 +1,23 @@
 import {Tournament} from "../types";
-import {For, Switch, Match} from "solid-js";
+import {For, Switch, Match, useContext} from "solid-js";
 import {TournamentInfo} from "./TournamentInfo";
-import { createQuery } from '@tanstack/solid-query'
-import {fetchTournaments} from "../api/tournaments";
 import {TournamentsTable, TournamentsTableHeader} from "../styles";
+import {TournamentCalendarContext} from "../App";
 
 export function TournamentList() {
 
-    const query = createQuery(() => ['tournaments'], fetchTournaments);
-    console.log("tournaments", query.data)
+    const [state] = useContext(TournamentCalendarContext);
 
     return (
         <Switch>
-            <Match when={query.isLoading}>
+            <Match when={state.loading} keyed={true}>
                 <p>Loading...</p>
             </Match>
-            <Match when={query.isError}>
-                <p>Error: {query.error.message}</p>
+            <Match when={state.error} keyed={true}>
+                <p>Error: {error}</p>
             </Match>
-            <Match when={query.isSuccess}>
+            <Match when={state.tournaments} keyed={true}>
+                <a href='/add'>Add new</a>
                 <TournamentsTable>
                     <thead>
                     <tr>
@@ -28,7 +27,7 @@ export function TournamentList() {
                         <TournamentsTableHeader>DETAILS</TournamentsTableHeader>
                     </tr>
                     </thead>
-                    <For each={query.data}>
+                    <For each={state.tournaments}>
                         {(tournament: Tournament) => {
                             return (<TournamentInfo tournament={tournament}/>)
                         }}

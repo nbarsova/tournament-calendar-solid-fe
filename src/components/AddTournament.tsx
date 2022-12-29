@@ -1,12 +1,18 @@
-import {createSignal, JSX} from "solid-js";
-import {emptyTournament, Tournament} from "../types";
+import {createSignal, JSX, useContext, For} from "solid-js";
+
 import {addNewTournament} from "../api/tournaments";
 import {createMutation} from '@tanstack/solid-query'
 import {formatDateForInput} from "../util/tournaments";
 import {AddButton, AddTournamentForm} from "../styles";
+import {Tournament, Location} from "../types";
+import {TournamentCalendarContext} from "../App";
+
+const emptyTournament = new Tournament();
 
 export function AddTournament() {
-    const [newTournament, setNewTournament] = createSignal(emptyTournament);
+    const [newTournament, setNewTournament] = createSignal<Tournament>(new Tournament());
+
+    const [store] = useContext(TournamentCalendarContext);
 
     const mutation = createMutation(['tournaments'], (tournament: Tournament) => {
         return addNewTournament(tournament);
@@ -15,9 +21,8 @@ export function AddTournament() {
     const addTournament: JSX.EventHandler<HTMLButtonElement, MouseEvent> = async (event) => {
         try {
             event.preventDefault();
-
-        mutation.mutate(newTournament());
-        setNewTournament(emptyTournament);
+            mutation.mutate(newTournament());
+            setNewTournament(emptyTournament);
         } catch (error) {
             console.log('error saving', error);
         }
@@ -34,16 +39,18 @@ export function AddTournament() {
             setNewTournament({ ...newTournament(), date: new Date(e.currentTarget.value) });
         }}/>
         <p>Link to details:</p>
-        <input type="text" value={newTournament().descriptionLink} onInput={(e) => {
-            setNewTournament({ ...newTournament(), description: e.currentTarget.value });
+        <input type="text" value={newTournament().description} onInput={(e) => {
+            setNewTournament({ ...newTournament(), descriptionLink: e.currentTarget.value });
         }}/>
 
         <p>Location</p>
-        <input type="text" value={newTournament().location?.name || ""} onInput={(e) => {
-            setNewTournament({ ...newTournament(), location: {
-                name: e.currentTarget.value
-                } });
-        }}/>
+        <select id="location">
+            <For each={store.locations}>
+                {(location: Location) => {
+                    return (<option value={location.id}>{location.name}</option>)
+                }}
+            </For>
+        </select>
         <AddButton onClick={addTournament}>Add</AddButton>
 
         <a href='/'>back to all tournaments</a>
