@@ -5,10 +5,8 @@ const host = getCurrentHost();
 
 export async function fetchTournaments() {
     try {
-        console.log("Fetching tournaments")
         let tournamentResponse: Response = await fetch(host+"tournaments");
         let tournamentJSON = await tournamentResponse.json();
-        console.log("fetched", tournamentJSON);
         return tournamentJSON;
     } catch (error) {
         console.log("error", error);
@@ -18,6 +16,7 @@ export async function fetchTournaments() {
 }
 
 export async function addNewTournament(tournament: Tournament) {
+    console.log("Saving tournament", tournament)
     await fetch(host+'tournaments', {
         method: 'POST',
         headers: {

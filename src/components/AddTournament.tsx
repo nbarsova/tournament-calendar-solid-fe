@@ -40,11 +40,17 @@ export function AddTournament() {
         }}/>
         <p>Link to details:</p>
         <input type="text" value={newTournament().description} onInput={(e) => {
-            setNewTournament({ ...newTournament(), descriptionLink: e.currentTarget.value });
+            setNewTournament({ ...newTournament(), description: e.currentTarget.value });
         }}/>
 
         <p>Location</p>
-        <select id="location">
+        <select id="location" onChange={(e) => {
+            const newLocation: Location = store.locations.find((loc:Location)=> {
+                return Number(loc.id) === Number(e.currentTarget.value);
+            });
+
+            setNewTournament({ ...newTournament(), location: newLocation });
+        }}>
             <For each={store.locations}>
                 {(location: Location) => {
                     return (<option value={location.id}>{location.name}</option>)
